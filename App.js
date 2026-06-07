@@ -67,10 +67,15 @@ if (process.env.REDIS_URL) {
 // Middleware - Order matters!
 app.use(cors({ 
   origin: (origin, callback) => {
-    if (!origin || allowedOrigins.includes(origin)) {
+    if (
+      !origin || 
+      allowedOrigins.includes(origin) || 
+      origin.endsWith('.vercel.app') || 
+      /https:\/\/[a-zA-Z0-9-]+\.vercel\.app/.test(origin)
+    ) {
       return callback(null, true)
     }
-    callback(new Error('CORS policy: origin not allowed'))
+    callback(new Error(`CORS policy: origin ${origin} not allowed`))
   },
   credentials: true,
 }))
