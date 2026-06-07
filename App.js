@@ -41,22 +41,28 @@ const io = new Server(server, {
   },
 })
 
-// Redis Setup
-const redisClient = createClient({ 
-  url: process.env.REDIS_URL || 'redis://localhost:6379' 
-})
+// Redis Setup (Optional)
+let redisClient = null
+if (process.env.REDIS_URL) {
+  redisClient = createClient({ 
+    url: process.env.REDIS_URL 
+  })
 
-redisClient.on('error', (err) => console.error('Redis Client Error', err))
+  redisClient.on('error', (err) => console.error('Redis Client Error:', err.message))
 
-// Connect Redis
-await (async () => {
-  try {
-    await redisClient.connect()
-    console.log('Redis Connected')
-  } catch (err) {
-    console.warn('Redis connection failed, continuing without cache.')
-  }
-})()
+  // Connect Redis
+  await (async () => {
+    try {
+      await redisClient.connect()
+      console.log('✅ Redis Connected')
+    } catch (err) {
+      console.warn('⚠️ Redis connection failed, continuing without cache.')
+    }
+  })()
+} else {
+  console.log('ℹ️ Redis URL not configured. Running without Redis caching.')
+}
+
 
 // Middleware - Order matters!
 app.use(cors({ 
