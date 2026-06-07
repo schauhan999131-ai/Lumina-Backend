@@ -23,8 +23,7 @@ dotenv.config()
 // Initialize Database
 const dbConnected = await connectDB()
 if (!dbConnected) {
-  console.error('✖️ Database connection failed. Backend will not start.')
-  process.exit(1)
+  console.warn('⚠️ Warning: Database connection failed. Running in fallback/offline mode.')
 }
 
 const app = express()
