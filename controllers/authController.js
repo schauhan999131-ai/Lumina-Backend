@@ -33,11 +33,11 @@ export const signup = async (req, res) => {
       { expiresIn: '24h' }
     )
 
-    // Set cookie
+    // Set cookie — SameSite=None+Secure required for cross-origin (Vercel→Render)
     res.cookie('token', token, {
       httpOnly: true,
-      secure: process.env.NODE_ENV === 'production',
-      sameSite: 'lax',
+      secure: true,
+      sameSite: 'none',
       maxAge: 24 * 60 * 60 * 1000, // 24 hours
     })
 
@@ -75,11 +75,11 @@ export const login = async (req, res) => {
       { expiresIn: '24h' }
     )
 
-    // Set cookie
+    // Set cookie — SameSite=None+Secure required for cross-origin (Vercel→Render)
     res.cookie('token', token, {
       httpOnly: true,
-      secure: process.env.NODE_ENV === 'production',
-      sameSite: 'lax',
+      secure: true,
+      sameSite: 'none',
       maxAge: 24 * 60 * 60 * 1000, // 24 hours
     })
 
@@ -95,8 +95,8 @@ export const login = async (req, res) => {
 export const logout = (req, res) => {
   res.clearCookie('token', {
     httpOnly: true,
-    secure: process.env.NODE_ENV === 'production',
-    sameSite: 'lax',
+    secure: true,
+    sameSite: 'none',
   })
   res.json({ message: 'Logout successful' })
 }
