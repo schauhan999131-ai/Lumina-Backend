@@ -7,6 +7,14 @@ import cron from 'node-cron'
 import nodemailer from 'nodemailer'
 import { createClient } from 'redis'
 import dotenv from 'dotenv'
+import { existsSync } from 'node:fs'
+
+// Load secret file first (Render places it at /etc/secrets/.env), then fall back to local .env
+if (existsSync('/etc/secrets/.env')) {
+  dotenv.config({ path: '/etc/secrets/.env' })
+} else {
+  dotenv.config()
+}
 
 // Import routes
 import authRoutes from './routes/auth.js'
@@ -17,8 +25,6 @@ import healthRoutes from './routes/health.js'
 
 // Import database connection
 import connectDB from './config.js'
-
-dotenv.config()
 
 // Initialize Database
 const dbConnected = await connectDB()
