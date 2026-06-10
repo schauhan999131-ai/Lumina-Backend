@@ -42,6 +42,50 @@ const userSchema = new mongoose.Schema({
     type: Boolean,
     default: false,
   },
+  studyTimerEndTime: {
+    type: Number,
+    default: 0,
+  },
+  studyTimerActive: {
+    type: Boolean,
+    default: false,
+  },
+  studyTimerMode: {
+    type: String,
+    default: 'work',
+  },
+  studyTimerTimeLeft: {
+    type: Number,
+    default: 0,
+  },
+  studyWorkDuration: {
+    type: Number,
+    default: 25,
+  },
+  studyShortDuration: {
+    type: Number,
+    default: 5,
+  },
+  studyLongDuration: {
+    type: Number,
+    default: 15,
+  },
+  studySessionsCompleted: {
+    type: Number,
+    default: 0,
+  },
+  studyFocusMinutes: {
+    type: Number,
+    default: 0,
+  },
+  studyFocusHistory: {
+    type: String,
+    default: '[]',
+  },
+  studyTimerLastReset: {
+    type: Date,
+    default: Date.now,
+  },
   createdAt: {
     type: Date,
     default: Date.now,
