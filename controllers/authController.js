@@ -186,9 +186,8 @@ const checkAndResetDailyTimer = async (user) => {
   const twentyFourHours = 24 * 60 * 60 * 1000
 
   if (msPassed >= twentyFourHours) {
+    // Only reset daily sessions count. Do NOT clear cumulative focus history or minutes.
     user.studySessionsCompleted = 0
-    user.studyFocusMinutes = 0
-    user.studyFocusHistory = '[]'
     user.studyTimerLastReset = now
     
     user.studyTimerActive = false
@@ -257,19 +256,16 @@ export const updateTimerState = async (req, res) => {
     if (studyShortDuration !== undefined) user.studyShortDuration = studyShortDuration
     if (studyLongDuration !== undefined) user.studyLongDuration = studyLongDuration
     
+    // Always update cumulative/historical fields (do not condition them on daily reset status)
+    if (studyFocusMinutes !== undefined) user.studyFocusMinutes = studyFocusMinutes
+    if (studyFocusHistory !== undefined) user.studyFocusHistory = studyFocusHistory
+
+    // Only conditionalize daily sessions completed to avoid overwriting the reset state with old client data
     if (!resetTriggered) {
       if (studySessionsCompleted !== undefined) user.studySessionsCompleted = studySessionsCompleted
-      if (studyFocusMinutes !== undefined) user.studyFocusMinutes = studyFocusMinutes
-      if (studyFocusHistory !== undefined) user.studyFocusHistory = studyFocusHistory
     } else {
       if (studySessionsCompleted !== undefined && studySessionsCompleted > 0) {
         user.studySessionsCompleted = studySessionsCompleted
-      }
-      if (studyFocusMinutes !== undefined && studyFocusMinutes > 0) {
-        user.studyFocusMinutes = studyFocusMinutes
-      }
-      if (studyFocusHistory !== undefined && studyFocusHistory !== '[]') {
-        user.studyFocusHistory = studyFocusHistory
       }
     }
 

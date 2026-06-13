@@ -99,10 +99,34 @@ router.get('/stats', isAuthenticated, async (req, res) => {
       dailyStats.push({ label: dayName, count })
     }
 
+    // Generate last 4 weeks
+    const weeklyStats = []
+    const now = new Date()
+    for (let i = 3; i >= 0; i--) {
+      const start = new Date(now)
+      start.setDate(now.getDate() - ((i + 1) * 7 - 1))
+      start.setHours(0, 0, 0, 0)
+      
+      const end = new Date(now)
+      end.setDate(now.getDate() - i * 7)
+      end.setHours(23, 59, 59, 999)
+      
+      const label = i === 0 ? 'This Wk' : `Wk -${i}`
+      
+      const count = completedTasks.filter(t => {
+        if (!t.completedAt) return false
+        const compDate = new Date(t.completedAt)
+        return compDate >= start && compDate <= end
+      }).length
+      
+      weeklyStats.push({ label, count })
+    }
+
     // Generate last 6 months
     const monthlyStats = []
     for (let i = 5; i >= 0; i--) {
       const d = new Date()
+      d.setDate(1) // Avoid day-of-month rollover bug (e.g. Feb 31 -> Mar 3)
       d.setMonth(d.getMonth() - i)
       const monthName = d.toLocaleDateString('en-US', { month: 'short' })
       const year = d.getFullYear()
@@ -140,6 +164,7 @@ router.get('/stats', isAuthenticated, async (req, res) => {
 
     res.json({
       daily: dailyStats,
+      weekly: weeklyStats,
       monthly: monthlyStats,
       yearly: yearlyStats,
       todayCompletedCount,
