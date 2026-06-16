@@ -192,7 +192,11 @@ const checkAndResetDailyTimer = async (user) => {
     
     user.studyTimerActive = false
     user.studyTimerEndTime = 0
-    user.studyTimerTimeLeft = 0
+    let durationMins = 25
+    if (user.studyTimerMode === 'work') durationMins = user.studyWorkDuration || 25
+    else if (user.studyTimerMode === 'short') durationMins = user.studyShortDuration || 5
+    else durationMins = user.studyLongDuration || 15
+    user.studyTimerTimeLeft = durationMins * 60
     await user.save()
     return true
   }

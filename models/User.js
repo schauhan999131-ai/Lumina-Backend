@@ -56,7 +56,7 @@ const userSchema = new mongoose.Schema({
   },
   studyTimerTimeLeft: {
     type: Number,
-    default: 0,
+    default: 1500,
   },
   studyWorkDuration: {
     type: Number,
