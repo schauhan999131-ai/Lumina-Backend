@@ -223,6 +223,7 @@ export const getTimerState = async (req, res) => {
       studySessionsCompleted: user.studySessionsCompleted,
       studyFocusMinutes: user.studyFocusMinutes,
       studyFocusHistory: user.studyFocusHistory,
+      studyAcceptedDays: user.studyAcceptedDays,
       studyTimerLastReset: user.studyTimerLastReset
     })
   } catch (error) {
@@ -249,7 +250,8 @@ export const updateTimerState = async (req, res) => {
       studyLongDuration,
       studySessionsCompleted,
       studyFocusMinutes,
-      studyFocusHistory
+      studyFocusHistory,
+      studyAcceptedDays
     } = req.body
 
     if (studyTimerEndTime !== undefined) user.studyTimerEndTime = studyTimerEndTime
@@ -263,6 +265,7 @@ export const updateTimerState = async (req, res) => {
     // Always update cumulative/historical fields (do not condition them on daily reset status)
     if (studyFocusMinutes !== undefined) user.studyFocusMinutes = studyFocusMinutes
     if (studyFocusHistory !== undefined) user.studyFocusHistory = studyFocusHistory
+    if (studyAcceptedDays !== undefined) user.studyAcceptedDays = studyAcceptedDays
 
     // Only conditionalize daily sessions completed to avoid overwriting the reset state with old client data
     if (!resetTriggered) {
@@ -288,6 +291,7 @@ export const updateTimerState = async (req, res) => {
         studySessionsCompleted: user.studySessionsCompleted,
         studyFocusMinutes: user.studyFocusMinutes,
         studyFocusHistory: user.studyFocusHistory,
+        studyAcceptedDays: user.studyAcceptedDays,
         studyTimerLastReset: user.studyTimerLastReset
       }
     })

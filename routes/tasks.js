@@ -7,7 +7,14 @@ const router = express.Router()
 // Get all tasks for logged in user
 router.get('/', isAuthenticated, async (req, res) => {
   try {
-    const tasks = await Task.find({ userId: req.userId }).sort({ createdAt: -1 })
+    const oneDayAgo = new Date(Date.now() - 24 * 60 * 60 * 1000)
+    const tasks = await Task.find({
+      userId: req.userId,
+      $or: [
+        { status: { $ne: 'Completed' } },
+        { completedAt: { $gte: oneDayAgo } }
+      ]
+    }).sort({ createdAt: -1 })
     res.json({ data: tasks })
   } catch (error) {
     res.status(500).json({ error: error.message })

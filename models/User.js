@@ -82,6 +82,10 @@ const userSchema = new mongoose.Schema({
     type: String,
     default: '[]',
   },
+  studyAcceptedDays: {
+    type: String,
+    default: '[]',
+  },
   studyTimerLastReset: {
     type: Date,
     default: Date.now,
