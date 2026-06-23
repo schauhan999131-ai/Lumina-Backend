@@ -23,6 +23,7 @@ import taskRoutes from './routes/tasks.js'
 import wealthRoutes from './routes/wealth.js'
 import healthRoutes from './routes/health.js'
 import noteRoutes from './routes/notes.js'
+import vocabRoutes from './routes/vocab.js'
 
 // Import database connection
 import connectDB from './config.js'
@@ -103,6 +104,7 @@ app.use('/api/tasks', taskRoutes)
 app.use('/api/wealth', wealthRoutes)
 app.use('/api/health-tracker', healthRoutes)
 app.use('/api/notes', noteRoutes)
+app.use('/api/vocab', vocabRoutes)
 
 // Socket.io Connection
 io.on('connection', (socket) => {
