@@ -220,6 +220,7 @@ export const getTimerState = async (req, res) => {
       studyWorkDuration: user.studyWorkDuration,
       studyShortDuration: user.studyShortDuration,
       studyLongDuration: user.studyLongDuration,
+      studyTimerStartDuration: user.studyTimerStartDuration,
       studySessionsCompleted: user.studySessionsCompleted,
       studyFocusMinutes: user.studyFocusMinutes,
       studyFocusHistory: user.studyFocusHistory,
@@ -248,6 +249,7 @@ export const updateTimerState = async (req, res) => {
       studyWorkDuration,
       studyShortDuration,
       studyLongDuration,
+      studyTimerStartDuration,
       studySessionsCompleted,
       studyFocusMinutes,
       studyFocusHistory,
@@ -261,6 +263,7 @@ export const updateTimerState = async (req, res) => {
     if (studyWorkDuration !== undefined) user.studyWorkDuration = studyWorkDuration
     if (studyShortDuration !== undefined) user.studyShortDuration = studyShortDuration
     if (studyLongDuration !== undefined) user.studyLongDuration = studyLongDuration
+    if (studyTimerStartDuration !== undefined) user.studyTimerStartDuration = studyTimerStartDuration
     
     // Always update cumulative/historical fields (do not condition them on daily reset status)
     if (studyFocusMinutes !== undefined) user.studyFocusMinutes = studyFocusMinutes
@@ -288,6 +291,7 @@ export const updateTimerState = async (req, res) => {
         studyWorkDuration: user.studyWorkDuration,
         studyShortDuration: user.studyShortDuration,
         studyLongDuration: user.studyLongDuration,
+        studyTimerStartDuration: user.studyTimerStartDuration,
         studySessionsCompleted: user.studySessionsCompleted,
         studyFocusMinutes: user.studyFocusMinutes,
         studyFocusHistory: user.studyFocusHistory,
