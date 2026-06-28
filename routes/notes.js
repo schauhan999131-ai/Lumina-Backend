@@ -4,11 +4,30 @@ import { isAuthenticated } from '../middleware/auth.js'
 
 const router = express.Router()
 
-// Get all notes for the logged in user
+// Get all notes for the logged in user.
+// We deliberately exclude `images` here — they are large base64 blobs and the list
+// view only needs titles/subjects/content. Images are loaded per-note on demand via
+// GET /:id. `.lean()` returns plain JS objects (no Mongoose hydration) for speed.
 router.get('/', isAuthenticated, async (req, res) => {
   try {
-    const notes = await Note.find({ userId: req.userId }).sort({ updatedAt: -1 })
+    const notes = await Note.find({ userId: req.userId })
+      .select('-images')
+      .sort({ updatedAt: -1 })
+      .lean()
     res.json({ data: notes })
+  } catch (error) {
+    res.status(500).json({ error: error.message })
+  }
+})
+
+// Get a single full note (including images) for the logged in user.
+router.get('/:id', isAuthenticated, async (req, res) => {
+  try {
+    const note = await Note.findOne({ _id: req.params.id, userId: req.userId }).lean()
+    if (!note) {
+      return res.status(404).json({ error: 'Note not found' })
+    }
+    res.json({ data: note })
   } catch (error) {
     res.status(500).json({ error: error.message })
   }

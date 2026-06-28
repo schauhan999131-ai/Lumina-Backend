@@ -52,4 +52,9 @@ const noteSchema = new mongoose.Schema({
   timestamps: true,
 })
 
+// Notes are always queried by owner and sorted by most-recently-updated.
+// This compound index lets MongoDB serve that query from the index instead of
+// scanning the whole collection and sorting in memory.
+noteSchema.index({ userId: 1, updatedAt: -1 })
+
 export default mongoose.model('Note', noteSchema)
