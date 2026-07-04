@@ -30,7 +30,7 @@ export const signup = async (req, res) => {
     const token = jwt.sign(
       { userId: user._id.toString(), userEmail: user.email, role: user.role },
       process.env.JWT_SECRET || 'your-secret-key-change-in-production',
-      { expiresIn: '24h' }
+      { expiresIn: '7d' }
     )
 
     // Set cookie — SameSite=None+Secure required for cross-origin (Vercel→Render)
@@ -38,7 +38,7 @@ export const signup = async (req, res) => {
       httpOnly: true,
       secure: true,
       sameSite: 'none',
-      maxAge: 24 * 60 * 60 * 1000, // 24 hours
+      maxAge: 7 * 24 * 60 * 60 * 1000, // 7 days
     })
 
     res.status(201).json({
@@ -72,7 +72,7 @@ export const login = async (req, res) => {
     const token = jwt.sign(
       { userId: user._id.toString(), userEmail: user.email, role: user.role },
       process.env.JWT_SECRET || 'your-secret-key-change-in-production',
-      { expiresIn: '24h' }
+      { expiresIn: '7d' }
     )
 
     // Set cookie — SameSite=None+Secure required for cross-origin (Vercel→Render)
@@ -80,7 +80,7 @@ export const login = async (req, res) => {
       httpOnly: true,
       secure: true,
       sameSite: 'none',
-      maxAge: 24 * 60 * 60 * 1000, // 24 hours
+      maxAge: 7 * 24 * 60 * 60 * 1000, // 7 days
     })
 
     res.json({
