@@ -24,6 +24,7 @@ import wealthRoutes from './routes/wealth.js'
 import healthRoutes from './routes/health.js'
 import noteRoutes from './routes/notes.js'
 import vocabRoutes from './routes/vocab.js'
+import lifeGoalRoutes from './routes/lifegoals.js'
 
 // Import database connection
 import connectDB from './config.js'
@@ -38,7 +39,7 @@ const app = express()
 const server = createServer(app)
 
 const FRONTEND_URL = process.env.FRONTEND_URL || 'http://localhost:3000'
-const allowedOrigins = [FRONTEND_URL, 'http://localhost:5173', 'http://localhost:3003']
+const allowedOrigins = [FRONTEND_URL, 'http://localhost:5173', 'http://localhost:3003', 'http://localhost:3001']
 
 // Initialize Socket.io
 const io = new Server(server, {
@@ -105,6 +106,7 @@ app.use('/api/wealth', wealthRoutes)
 app.use('/api/health-tracker', healthRoutes)
 app.use('/api/notes', noteRoutes)
 app.use('/api/vocab', vocabRoutes)
+app.use('/api/life-goals', lifeGoalRoutes)
 
 // Socket.io Connection
 io.on('connection', (socket) => {
