@@ -7,6 +7,7 @@ const mapNodeSchema = new mongoose.Schema({
   kind: { type: String, enum: ['goal', 'task', 'avoid', 'note'], default: 'note' },
   x: { type: Number, default: 0 },
   y: { type: Number, default: 0 },
+  completed: { type: Boolean, default: false },
 }, { _id: false })
 
 // User-drawn connection between two nodes.
