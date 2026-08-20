@@ -29,12 +29,6 @@ import lifeGoalRoutes from './routes/lifegoals.js'
 // Import database connection
 import connectDB from './config.js'
 
-// Initialize Database
-const dbConnected = await connectDB()
-if (!dbConnected) {
-  console.warn('⚠️ Warning: Database connection failed. Running in fallback/offline mode.')
-}
-
 const app = express()
 const server = createServer(app)
 
@@ -155,3 +149,10 @@ const startServer = (portToTry) => {
 
 const initialPort = parseInt(process.env.PORT, 10) || 4000
 startServer(initialPort)
+
+// Start accepting health checks before waiting for MongoDB so Render can wake the service.
+connectDB().then((dbConnected) => {
+  if (!dbConnected) {
+    console.warn('⚠️ Warning: Database connection failed. Protected data routes may be unavailable.')
+  }
+})

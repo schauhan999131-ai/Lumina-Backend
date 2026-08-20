@@ -9,7 +9,10 @@ const connectDB = async () => {
     const sanitizedURI = mongoURI.replace(/:([^:@]+)@/, ':***@');
     console.log(`🔌 Connecting to database: ${sanitizedURI}`);
     
-    await mongoose.connect(mongoURI);
+    await mongoose.connect(mongoURI, {
+      serverSelectionTimeoutMS: 10000,
+      connectTimeoutMS: 10000,
+    });
     
     console.log(`✅ MongoDB connected successfully to: ${sanitizedURI}`);
     return true;
