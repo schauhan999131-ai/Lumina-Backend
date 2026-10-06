@@ -1,6 +1,13 @@
 import User from '../models/User.js'
 import jwt from 'jsonwebtoken'
 
+const authCookieOptions = {
+  httpOnly: true,
+  secure: process.env.NODE_ENV === 'production',
+  sameSite: process.env.NODE_ENV === 'production' ? 'none' : 'lax',
+  maxAge: 7 * 24 * 60 * 60 * 1000,
+}
+
 export const signup = async (req, res) => {
   try {
     const { email, password, role = 'Staff', plan = 'Free' } = req.body
@@ -33,13 +40,7 @@ export const signup = async (req, res) => {
       { expiresIn: '7d' }
     )
 
-    // Set cookie — SameSite=None+Secure required for cross-origin (Vercel→Render)
-    res.cookie('token', token, {
-      httpOnly: true,
-      secure: true,
-      sameSite: 'none',
-      maxAge: 7 * 24 * 60 * 60 * 1000, // 7 days
-    })
+    res.cookie('token', token, authCookieOptions)
 
     res.status(201).json({
       message: 'User created successfully',
@@ -75,13 +76,7 @@ export const login = async (req, res) => {
       { expiresIn: '7d' }
     )
 
-    // Set cookie — SameSite=None+Secure required for cross-origin (Vercel→Render)
-    res.cookie('token', token, {
-      httpOnly: true,
-      secure: true,
-      sameSite: 'none',
-      maxAge: 7 * 24 * 60 * 60 * 1000, // 7 days
-    })
+    res.cookie('token', token, authCookieOptions)
 
     res.json({
       message: 'Login successful',
@@ -93,11 +88,7 @@ export const login = async (req, res) => {
 }
 
 export const logout = (req, res) => {
-  res.clearCookie('token', {
-    httpOnly: true,
-    secure: true,
-    sameSite: 'none',
-  })
+  res.clearCookie('token', authCookieOptions)
   res.json({ message: 'Logout successful' })
 }
 
